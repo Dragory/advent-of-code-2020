@@ -20,21 +20,19 @@ struct ExecutionResult {
 }
 
 fn parse_instruction(instruction: &str) -> Instruction {
+    // "opname +10"
     let parts = instruction.split(" ").collect::<Vec<_>>();
-    let opname = parts[0];
-    let raw_value = parts[1];
-    let value = raw_value.parse::<i32>().unwrap();
-
-    let operation = match opname {
+    let operation = match parts[0] {
         "nop" => Operation::Nop,
         "acc" => Operation::Acc,
         "jmp" => Operation::Jmp,
-        _ => panic!("Invalid opname {}", opname)
+        _ => panic!("Invalid opname {}", parts[0])
     };
+    let value = parts[1].parse::<i32>().unwrap();
 
     return Instruction {
         operation,
-        value: value
+        value
     };
 }
 
