@@ -40,32 +40,32 @@ fn parse_instruction(instruction: &str) -> Instruction {
 
 fn execute_instructions(instructions: &Vec<&Instruction>) -> ExecutionResult {
     let mut accumulator: i32 = 0;
-    let mut instruction_index: i32 = 0;
+    let mut instruction_index: usize = 0;
     let mut executed_lines: HashSet<usize> = HashSet::new();
     let mut success = false;
 
     loop {
-        executed_lines.insert(instruction_index as usize);
+        executed_lines.insert(instruction_index);
 
-        let instruction = &instructions[instruction_index as usize];
+        let instruction = &instructions[instruction_index];
         match instruction.operation {
             Operation::Acc => {
                 accumulator += instruction.value;
                 instruction_index += 1;
             },
             Operation::Jmp => {
-                instruction_index += instruction.value;
+                instruction_index = (instruction_index as i32 + instruction.value) as usize;
             },
             Operation::Nop => {
                 instruction_index += 1;
             }
-        }
+        };
 
-        if executed_lines.contains(&(instruction_index as usize)) {
+        if executed_lines.contains(&instruction_index) {
             break;
         }
 
-        if instruction_index as usize >= instructions.len() {
+        if instruction_index >= instructions.len() {
             success = true;
             break;
         }
