@@ -14,18 +14,16 @@ struct Instruction {
     value: i32
 }
 
+struct ExecutionResult {
+    accumulator: i32,
+    success: bool
+}
+
 fn parse_instruction(instruction: &str) -> Instruction {
     let parts = instruction.split(" ").collect::<Vec<_>>();
     let opname = parts[0];
     let raw_value = parts[1];
-
-    let value: &str;
-    if &raw_value[..1] == "+" {
-        value = &raw_value[1..]; // +10 -> 10
-    } else {
-        value = &raw_value; // -10 stays -10
-    }
-    let value_int = value.parse::<i32>().unwrap();
+    let value = raw_value.parse::<i32>().unwrap();
 
     let operation = match opname {
         "nop" => Operation::Nop,
@@ -36,13 +34,8 @@ fn parse_instruction(instruction: &str) -> Instruction {
 
     return Instruction {
         operation,
-        value: value_int
+        value: value
     };
-}
-
-struct ExecutionResult {
-    accumulator: i32,
-    success: bool
 }
 
 fn execute_instructions(instructions: &Vec<&Instruction>) -> ExecutionResult {
@@ -61,7 +54,6 @@ fn execute_instructions(instructions: &Vec<&Instruction>) -> ExecutionResult {
                 instruction_index += 1;
             },
             Operation::Jmp => {
-                // println!("jmp {}", instruction.value);
                 instruction_index += instruction.value;
             },
             Operation::Nop => {
