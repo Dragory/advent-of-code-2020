@@ -27,19 +27,19 @@ fn part1(adapters: &Vec<i32>) -> i32 {
 fn part2(adapters: &Vec<i32>) -> i64 {
     let mut result: i64 = 1;
 
-    let mut chunk = vec![0];
+    let mut group = vec![0];
     for adapter in adapters {
-        if *adapter > *chunk.last().unwrap() + 2 {
-            let chain_count = find_chain_count(*chunk.first().unwrap(), &chunk[1..]);
+        if *adapter > *group.last().unwrap() + 2 {
+            let chain_count = find_chain_count(*group.first().unwrap(), &group[1..]);
             result *= chain_count;
-            chunk = vec![];
+            group = vec![];
         }
 
-        chunk.push(*adapter);
+        group.push(*adapter);
     }
 
-    if chunk.len() > 0 {
-        result *= find_chain_count(*chunk.first().unwrap(), &chunk[1..]);
+    if group.len() > 0 {
+        result *= find_chain_count(*group.first().unwrap(), &group[1..]);
     }
 
     return result;
